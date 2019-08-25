@@ -65,6 +65,7 @@ push-release-3:
         tag: $WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT-jet-movie-msa-ui
 
 #Deploy our container from the Oracle Container Registry to the Oracle Container Engine (Kubernetes)
+#Test
 deploy-to-cluster:
   box:
     id: alpine
