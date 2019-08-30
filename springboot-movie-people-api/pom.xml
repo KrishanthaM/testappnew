@@ -8,10 +8,11 @@
 		<version>2.1.7.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.myproject</groupId>
-	<artifactId>MyProject-5</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>MyProject-5</name>
+	<groupId>com.example</groupId>
+	<artifactId>springboot-movie-people-api</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
