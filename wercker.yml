@@ -19,7 +19,7 @@ build:
         code: mvn clean package 
     - script:
         name: maven spring boot build
-        cwd: springboot-movie-people-api
+        cwd: MyProject-5
         code: mvn clean package
 
 #Push the docker image with our built and tested application to the Oracle Container Registry
