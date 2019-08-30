@@ -20,7 +20,7 @@ build:
     - script:
         name: maven spring boot build
         cwd: springboot-movie-people-api
-        code: mvn clean install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.3 -Dpackaging=jar -Dfile=lib\ojdbc7.jar -DgeneratePom=true package
+        code: mvn clean install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.3 -Dpackaging=jar -Dfile=lib/ojdbc7.jar -DgeneratePom=true package
 
 #Push the docker image with our built and tested application to the Oracle Container Registry
 push-release-1:
