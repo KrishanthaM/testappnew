@@ -14,26 +14,9 @@ build:
     - install-packages:
         packages: maven
     - script:
-        name: maven helidon build
-        cwd: helidon-movie-api-mp
-        code: mvn clean package 
-    - script:
         name: maven spring boot build
         cwd: springboot-movie-people-api
         code: mvn clean install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.3 -Dpackaging=jar -Dfile=lib/ojdbc7.jar -DgeneratePom=true package
-
-#Push the docker image with our built and tested application to the Oracle Container Registry
-push-release-1:
-  steps:
-    - internal/docker-push:
-        username: $DOCKER_USERNAME
-        password: $OCI_AUTH_TOKEN
-        repository: $DOCKER_REGISTRY/$DOCKER_REPO
-        registry: https://$DOCKER_REGISTRY/v2
-        tag: $WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT-helidon-movie-api-mp
-        working-dir: /pipeline/source/helidon-movie-api-mp
-        ports: 8080
-        cmd: java -jar target/helidon-movie-api-mp.jar
 
 push-release-2:
   steps:
@@ -47,25 +30,7 @@ push-release-2:
         ports: 8000
         cmd: java -jar target/springboot-movie-people-api-1.0.jar
 
-push-release-3:
-  steps:
-    - script:
-        name: pwd
-        code: pwd
-    - internal/docker-build:
-        context: jet-movie-msa-ui
-        dockerfile: Dockerfile 
-        image-name: jet-movie-msa-ui
-    - internal/docker-push:
-        image-name: jet-movie-msa-ui
-        username: $DOCKER_USERNAME
-        password: $OCI_AUTH_TOKEN
-        repository: $DOCKER_REGISTRY/$DOCKER_REPO
-        registry: https://$DOCKER_REGISTRY/v2
-        tag: $WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT-jet-movie-msa-ui
-
 #Deploy our container from the Oracle Container Registry to the Oracle Container Engine (Kubernetes)
-#Test
 deploy-to-cluster:
   box:
     id: alpine
@@ -97,17 +62,6 @@ deploy-to-cluster:
 
     - script:
         name: "Visualise Kubernetes config"
-        code: cat kube-helidon-movie-api-mp-config.yml
-
-    - kubectl:
-        name: deploy helidon-movie-api-mp to kubernetes
-        server: $KUBERNETES_MASTER
-        token: $KUBERNETES_AUTH_TOKEN
-        insecure-skip-tls-verify: true
-        command: apply -f kube-helidon-movie-api-mp-config.yml
-
-    - script:
-        name: "Visualise Kubernetes config"
         code: cat kube-springboot-movie-people-api-config.yml
 
     - kubectl:
@@ -116,14 +70,3 @@ deploy-to-cluster:
         token: $KUBERNETES_AUTH_TOKEN
         insecure-skip-tls-verify: true
         command: apply -f kube-springboot-movie-people-api-config.yml
-
-    - script:
-        name: "Visualise Kubernetes config"
-        code: cat kube-jet-movie-msa-ui-config.yml
-
-    - kubectl:
-        name: deploy jet-movie-msa-ui to kubernetes
-        server: $KUBERNETES_MASTER
-        token: $KUBERNETES_AUTH_TOKEN
-        insecure-skip-tls-verify: true
-        command: apply -f kube-jet-movie-msa-ui-config.yml
